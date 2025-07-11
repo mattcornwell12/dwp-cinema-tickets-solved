@@ -142,6 +142,20 @@ describe('makePayment', () => {
 			equal(error.message, 'Not enough adults for number of children/infants');
 		});
 
+		it('should throw an error if there is no adult and 1 child', () => {
+			const ticket = new TicketService();
+			let error;
+
+			try {
+				ticket.purchaseTickets(1, new TicketTypeRequest('CHILD', 1));
+			} catch (e) {
+				error = e;
+			}
+
+			equal(paymentStub.getCalls().length, 0);
+			equal(error.message, 'Not enough adults for number of children/infants');
+		});
+
 		it('should throw an error if there are not enough adults for all infants', () => {
 			const ticket = new TicketService();
 			let error;
