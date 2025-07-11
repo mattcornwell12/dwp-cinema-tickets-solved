@@ -5,41 +5,39 @@ import SeatReservationService from '../thirdparty/seatbooking/SeatReservationSer
 export default class TicketService {
 	#PRICES = {ADULT: 25, CHILD: 10, INFANT: 0};
 
-  #sumTickets(requests) {
-    return requests.reduce(
-      (acc, ticket) => acc + ticket.getNoOfTickets(),
-      0
-    );
-  }
+	#sumTickets(requests) {
+		return requests.reduce(
+			(acc, ticket) => acc + ticket.getNoOfTickets(),
+			0,
+		);
+	}
 
-  /**
+	/**
    * Get all ticket requests matching the given type of ticket
-   * 
+   *
    * @param ticketTypeRequests, array of ticketTypeRequests
    * @param type, the type to filter on
-   *  
+   *
    * @returns all ticket type requests matching the given type
    */
-  #filterByType(ticketTypeRequests, type) {
-    return ticketTypeRequests.filter((request) => {
-      return request.getTicketType() === type;
-    });
-  }
+	#filterByType(ticketTypeRequests, type) {
+		return ticketTypeRequests.filter(request => request.getTicketType() === type);
+	}
 
-  /**
-   * 
-   * @param {*} ticketTypeRequests 
-   * @returns 
+	/**
+   *
+   * @param {*} ticketTypeRequests
+   * @returns
    */
-  #isRequestValid(ticketTypeRequests) {
-    const adultTickets = this.#filterByType(ticketTypeRequests, 'ADULT');
-    const infantTickets = this.#filterByType(ticketTypeRequests, 'INFANT');
+	#isRequestValid(ticketTypeRequests) {
+		const adultTickets = this.#filterByType(ticketTypeRequests, 'ADULT');
+		const infantTickets = this.#filterByType(ticketTypeRequests, 'INFANT');
 
-    const adultSum = this.#sumTickets(adultTickets);
-    const asManyInfantsAsAdult = adultSum >= this.#sumTickets(infantTickets);
+		const adultSum = this.#sumTickets(adultTickets);
+		const asManyInfantsAsAdult = adultSum >= this.#sumTickets(infantTickets);
 
-    return adultSum > 0 && asManyInfantsAsAdult;
-  }
+		return adultSum > 0 && asManyInfantsAsAdult;
+	}
 
 	#calculateCostOfTicketRequest(ticketTypeRequest) {
 		const type = ticketTypeRequest.getTicketType();
@@ -49,6 +47,7 @@ export default class TicketService {
 
 	#calculateSeatForTicketRequest(ticketTypeRequest) {
 		const isInfant = ticketTypeRequest.getTicketType() === 'INFANT';
+		/* Infants share with their parents */
 		return isInfant ? 0 : ticketTypeRequest.getNoOfTickets();
 	}
 
@@ -92,32 +91,32 @@ export default class TicketService {
 		return result;
 	}
 
-  /**
+	/**
    * Purchase the given request objects with the given account ID
-   * 
+   *
    * If the given request is valid, and the seat reservation succeeds, and
    * the payments go through, return true
-   * 
+   *
    * If the requests are invalid, throw an InvalidPurchaseException with
-   * an explanation of why 
-   * 
+   * an explanation of why
+   *
    * @param {Number} accountId, the ID to charge the cost to
    * @param  {...TicketTypeRequest} ticketTypeRequests, the requests to process
-   * @returns 
+   * @returns
    */
 	purchaseTickets(accountId, ...ticketTypeRequests) {
 		if (!Number.isInteger(accountId) || accountId < 1) {
 			throw new InvalidPurchaseException(`Invalid account ID ${accountId}`);
 		}
 
-    const totalTickets = this.#sumTickets(ticketTypeRequests);
-    if (totalTickets <= 0 || totalTickets > 25) {
-      throw new InvalidPurchaseException(`${totalTickets} too many, max is 25`);
-    }
+		const totalTickets = this.#sumTickets(ticketTypeRequests);
+		if (totalTickets <= 0 || totalTickets > 25) {
+			throw new InvalidPurchaseException(`${totalTickets} invalid, needs to be between 1 and 25`);
+		}
 
-    if (!this.#isRequestValid(ticketTypeRequests)) {
-      throw new InvalidPurchaseException('Not enough adults for number of children/infants');
-    }
+		if (!this.#isRequestValid(ticketTypeRequests)) {
+			throw new InvalidPurchaseException('Not enough adults for number of children/infants');
+		}
 
 		const {cost, seats} = this.#calculatePriceAndSeats(ticketTypeRequests);
 
