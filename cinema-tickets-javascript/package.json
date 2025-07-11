@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test/pairtest/TicketService.js"
   },
   "devDependencies": {
     "chai": "^5.2.1",
