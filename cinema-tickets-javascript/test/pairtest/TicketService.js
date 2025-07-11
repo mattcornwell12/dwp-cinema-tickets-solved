@@ -36,7 +36,7 @@ describe('makePayment', () => {
 				true,
 			);
 
-			deepEqual(paymentStub.getCalls()[0].args, [1, 420]);
+			deepEqual(paymentStub.getCalls()[0].args, [1, 430]);
 			deepEqual(seatStub.getCalls()[0].args, [1, 18]);
 			equal(paymentStub.getCalls().length, 1);
 		});

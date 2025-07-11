@@ -3,7 +3,7 @@ import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentServ
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
 
 export default class TicketService {
-	#PRICES = {ADULT: 25, CHILD: 10, INFANT: 0};
+	#PRICES = {ADULT: 25, CHILD: 15, INFANT: 0};
 
   /**
    * Sum all the seats in the given requests list
