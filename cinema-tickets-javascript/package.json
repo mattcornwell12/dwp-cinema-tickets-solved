@@ -7,6 +7,14 @@
   },
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
+  "devDependencies": {
+    "chai": "^5.2.1",
+    "chai-spies": "^1.1.0",
+    "eslint": "^9.30.1",
+    "eslint-config-xo": "^0.47.0",
+    "mocha": "^11.7.1",
+    "sinon": "^21.0.0"
+  }
 }
