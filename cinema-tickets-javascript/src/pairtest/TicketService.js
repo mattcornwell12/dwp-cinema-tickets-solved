@@ -5,11 +5,11 @@ import SeatReservationService from '../thirdparty/seatbooking/SeatReservationSer
 export default class TicketService {
 	#PRICES = {ADULT: 25, CHILD: 15, INFANT: 0};
 
-  /**
+	/**
    * Sum all the seats in the given requests list
-   * 
-   * @param {Array} requests 
-   * 
+   *
+   * @param {Array} requests
+   *
    * @returns {Number} total number of seats
    */
 	#sumTickets(requests) {
@@ -33,13 +33,13 @@ export default class TicketService {
 
 	/**
    * Calculate whether the given list of ticket requests are valid
-   * 
+   *
    * Tickets are valid if:
    * <ul>
    *   <li>There is at least one adult; and</li>
    *   <li>There are as many infants as children</li>
    * </ul>
-   * 
+   *
    * @param {*} ticketTypeRequests
    * @returns
    */
@@ -53,11 +53,11 @@ export default class TicketService {
 		return adultSum > 0 && asManyInfantsAsAdult;
 	}
 
-  /**
+	/**
    * Calculate the cost of a given ticket request
-   * 
+   *
    * @param {Object} ticketTypeRequest, the ticket request
-   * 
+   *
    * @returns {Number}, the cost
    */
 	#calculateCostOfTicketRequest(ticketTypeRequest) {
@@ -66,12 +66,12 @@ export default class TicketService {
 		return price * ticketTypeRequest.getNoOfTickets();
 	}
 
-  /**
-   * Calculate number of seats required for a single ticket type request 
-   * 
+	/**
+   * Calculate number of seats required for a single ticket type request
+   *
    * @param {Object} ticketTypeRequest, the request to calculate the seats for
-   * 
-   * @returns {Number}, the number of seats for this request 
+   *
+   * @returns {Number}, the number of seats for this request
    */
 	#calculateSeatForTicketRequest(ticketTypeRequest) {
 		const isInfant = ticketTypeRequest.getTicketType() === 'INFANT';
@@ -80,11 +80,11 @@ export default class TicketService {
 	}
 
 	/**
-   * Calculate the number of seats for the given requests, and calculate the 
+   * Calculate the number of seats for the given requests, and calculate the
    * cost of those tickets
-   * 
+   *
    * @param {Array} ticketTypeRequests, an array of ticket types
-   * 
+   *
    * @returns {Object}, with a seats property and cost property
    */
 	#calculatePriceAndSeats(ticketTypeRequests) {

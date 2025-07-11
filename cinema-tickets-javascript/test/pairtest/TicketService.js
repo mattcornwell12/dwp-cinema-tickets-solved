@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import TicketTypeRequest from '../../src/pairtest/lib/TicketTypeRequest.js';
 import TicketService from '../../src/pairtest/TicketService.js';
 import {deepEqual, equal} from 'assert';

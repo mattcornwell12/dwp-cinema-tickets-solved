@@ -7,7 +7,9 @@
   },
   "type": "module",
   "scripts": {
-    "test": "c8 mocha test/pairtest/TicketService.js"
+    "test": "c8 mocha test/pairtest/TicketService.js",
+    "lint": "npx eslint src/pairtest/TicketService.js test/pairtest/TicketService.js",
+    "lint:fix": "npx eslint src/pairtest/TicketService.js test/pairtest/TicketService.js --fix"
   },
   "devDependencies": {
     "c8": "^10.1.3",
