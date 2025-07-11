@@ -5,6 +5,13 @@ import SeatReservationService from '../thirdparty/seatbooking/SeatReservationSer
 export default class TicketService {
 	#PRICES = {ADULT: 25, CHILD: 10, INFANT: 0};
 
+  /**
+   * Sum all the seats in the given requests list
+   * 
+   * @param {Array} requests 
+   * 
+   * @returns {Number} total number of seats
+   */
 	#sumTickets(requests) {
 		return requests.reduce(
 			(acc, ticket) => acc + ticket.getNoOfTickets(),
@@ -25,7 +32,14 @@ export default class TicketService {
 	}
 
 	/**
-   *
+   * Calculate whether the given list of ticket requests are valid
+   * 
+   * Tickets are valid if:
+   * <ul>
+   *   <li>There is at least one adult; and</li>
+   *   <li>There are as many infants as children</li>
+   * </ul>
+   * 
    * @param {*} ticketTypeRequests
    * @returns
    */
@@ -39,23 +53,45 @@ export default class TicketService {
 		return adultSum > 0 && asManyInfantsAsAdult;
 	}
 
+  /**
+   * Calculate the cost of a given ticket request
+   * 
+   * @param {Object} ticketTypeRequest, the ticket request
+   * 
+   * @returns {Number}, the cost
+   */
 	#calculateCostOfTicketRequest(ticketTypeRequest) {
 		const type = ticketTypeRequest.getTicketType();
 		const price = this.#PRICES[type];
 		return price * ticketTypeRequest.getNoOfTickets();
 	}
 
+  /**
+   * Calculate number of seats required for a single ticket type request 
+   * 
+   * @param {Object} ticketTypeRequest, the request to calculate the seats for
+   * 
+   * @returns {Number}, the number of seats for this request 
+   */
 	#calculateSeatForTicketRequest(ticketTypeRequest) {
 		const isInfant = ticketTypeRequest.getTicketType() === 'INFANT';
 		/* Infants share with their parents */
 		return isInfant ? 0 : ticketTypeRequest.getNoOfTickets();
 	}
 
+	/**
+   * Calculate the number of seats for the given requests, and calculate the 
+   * cost of those tickets
+   * 
+   * @param {Array} ticketTypeRequests, an array of ticket types
+   * 
+   * @returns {Object}, with a seats property and cost property
+   */
 	#calculatePriceAndSeats(ticketTypeRequests) {
 		let totalCost = 0;
 		let totalSeats = 0;
 
-		for (const i in ticketTypeRequests) {
+		for (let i = 0; i < ticketTypeRequests.length; i++) {
 			totalCost += this.#calculateCostOfTicketRequest(ticketTypeRequests[i]);
 			totalSeats += this.#calculateSeatForTicketRequest(ticketTypeRequests[i]);
 		}
@@ -63,6 +99,14 @@ export default class TicketService {
 		return {cost: totalCost, seats: totalSeats};
 	}
 
+	/**
+   * Make a payment using the given account
+   *
+   * @param {Number} accountId
+   * @param {Number} costToPay
+   *
+   * @returns {Boolean}, true if payment was taken successfully
+   */
 	#payCost(accountId, costToPay) {
 		const paymentService = new TicketPaymentService();
 		let result;
@@ -70,13 +114,21 @@ export default class TicketService {
 		try {
 			paymentService.makePayment(accountId, costToPay);
 			result = true;
-		} catch (_error) {
+		} catch (_) {
 			result = false;
 		}
 
 		return result;
 	}
 
+	/**
+   * Reserve seats for the given account
+   *
+   * @param {Number} accountId
+   * @param {Number} seats
+   *
+   * @returns {Boolean}, true if seats were successfully reserved
+   */
 	#reserveSeats(accountId, seats) {
 		const reservationService = new SeatReservationService();
 		let result;
@@ -84,7 +136,7 @@ export default class TicketService {
 		try {
 			reservationService.reserveSeat(accountId, seats);
 			result = true;
-		} catch (_error) {
+		} catch (_) {
 			result = false;
 		}
 

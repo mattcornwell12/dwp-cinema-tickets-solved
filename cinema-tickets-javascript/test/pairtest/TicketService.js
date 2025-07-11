@@ -19,25 +19,25 @@ describe('makePayment', () => {
 			const ticket = new TicketService();
 			deepEqual(ticket.purchaseTickets(1, new TicketTypeRequest('ADULT', 1)), true);
 			deepEqual(paymentStub.getCalls()[0].args, [1, 25]);
-            deepEqual(seatStub.getCalls()[0].args, [1, 1]);
+			deepEqual(seatStub.getCalls()[0].args, [1, 1]);
 			equal(paymentStub.getCalls().length, 1);
 		});
 
-        it('should call the makePayment function with the correct args when there are many adults', () => {
+		it('should call the makePayment function with the correct args when there are many adults', () => {
 			const ticket = new TicketService();
 			deepEqual(
-                ticket.purchaseTickets(
-                    1, 
-                    new TicketTypeRequest('ADULT', 14),
-                    new TicketTypeRequest('ADULT', 2),
-                    new TicketTypeRequest('CHILD', 2),
-                    new TicketTypeRequest('INFANT', 2)
-                ), 
-                true
-            );
+				ticket.purchaseTickets(
+					1,
+					new TicketTypeRequest('ADULT', 14),
+					new TicketTypeRequest('ADULT', 2),
+					new TicketTypeRequest('CHILD', 2),
+					new TicketTypeRequest('INFANT', 2),
+				),
+				true,
+			);
 
 			deepEqual(paymentStub.getCalls()[0].args, [1, 420]);
-            deepEqual(seatStub.getCalls()[0].args, [1, 18]);
+			deepEqual(seatStub.getCalls()[0].args, [1, 18]);
 			equal(paymentStub.getCalls().length, 1);
 		});
 	});
@@ -72,10 +72,10 @@ describe('makePayment', () => {
 		});
 	});
 
-    describe('when reserveseat throws an error', () => {
+	describe('when reserveseat throws an error', () => {
 		it('returns false and doesnt attempt to take payment', () => {
 			const ticket = new TicketService();
-            seatStub.throwsException({ message: 'Broken' });
+			seatStub.throwsException({message: 'Broken'});
 			const result = ticket.purchaseTickets(1, new TicketTypeRequest('ADULT', 1));
 
 			equal(paymentStub.getCalls().length, 0);
@@ -83,10 +83,10 @@ describe('makePayment', () => {
 		});
 	});
 
-    describe('when taking payment throws an error', () => {
+	describe('when taking payment throws an error', () => {
 		it('returns false and doesnt attempt to take payment', () => {
 			const ticket = new TicketService();
-            paymentStub.throwsException({ message: 'Broken' });
+			paymentStub.throwsException({message: 'Broken'});
 			const result = ticket.purchaseTickets(1, new TicketTypeRequest('ADULT', 1));
 
 			equal(paymentStub.getCalls().length, 1);
@@ -147,11 +147,11 @@ describe('makePayment', () => {
 
 			try {
 				ticket.purchaseTickets(
-                    1, 
-                    new TicketTypeRequest('ADULT', 2), 
-                    new TicketTypeRequest('INFANT', 2), 
-                    new TicketTypeRequest('INFANT', 1)
-                );
+					1,
+					new TicketTypeRequest('ADULT', 2),
+					new TicketTypeRequest('INFANT', 2),
+					new TicketTypeRequest('INFANT', 1),
+				);
 			} catch (e) {
 				error = e;
 			}
